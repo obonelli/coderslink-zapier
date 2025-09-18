@@ -1,21 +1,25 @@
 # CodersLink / Zapier Integration Challenge
 
 ## Overview
-This project is a sample Zapier integration built for the CodersLink Skill Test.  
-It connects with **TheCatAPI** as the target service.
+This project is a **Zapier CLI integration** built for the CodersLink Skill Test.  
+It connects with **[TheCatAPI](https://thecatapi.com/)**, a public API that provides cat images and related features.
 
-- **Authentication**: API Key (sent in header `x-api-key`)  
-- **Trigger**: `New Image` – retrieves the latest images from TheCatAPI  
-- **Action**: `Create Favorite` – marks an image as favorite  
+The integration includes:
 
-This setup demonstrates the ability to handle authentication, polling triggers, and POST actions in a Zapier CLI integration.
+- **Authentication**: API Key (sent via header `x-api-key`).  
+- **Trigger**: `New Image` – retrieves the latest images from TheCatAPI.  
+- **Action**: `Create Favorite` – marks an image as favorite.  
+
+This setup demonstrates how to handle **custom authentication**, **polling triggers**, and **POST actions** inside a Zapier CLI app.
+
+🔗 **Zapier App Link (Private for now):** [CodersLink TheCatAPI on Zapier](https://developer.zapier.com/app/230836/version/1.0.0)
 
 ---
 
 ## Requirements
-- Node.js 18 or higher  
+- Node.js **18 or higher**  
 - [Zapier Platform CLI](https://github.com/zapier/zapier-platform) (`npm i -g zapier-platform-cli`)  
-- Free API Key from [TheCatAPI](https://thecatapi.com/)  
+- Free API Key from [TheCatAPI Dashboard](https://thecatapi.com/)  
 
 ---
 
@@ -41,24 +45,43 @@ zapier push
 2. Connect your account by entering your API Key.  
 3. Add the **Trigger: New Image** to fetch sample images.  
 4. Add the **Action: Create Favorite** and pass an `image_id` from the trigger results.  
-5. Test both steps. A successful action returns `{ "message": "SUCCESS", "id": ... }`.  
+5. Test both steps.  
+   - A successful action returns:  
+     ```json
+     { "message": "SUCCESS", "id": "..." }
+     ```
 
 ---
 
-## Trade-offs and Assumptions
-- **Polling vs Webhooks**: The integration uses polling since TheCatAPI provides simple GET endpoints but no webhook support.  
-- **Sample Data**: The trigger returns a limited set of fields (`id`, `url`, `width`, `height`) to keep it simple.  
-- **API Choice**: TheCatAPI was chosen as a lightweight public API suitable for demonstration.  
+## Trade-offs
+- **Polling vs Webhooks**: Chose polling because TheCatAPI does not provide webhook support.  
+- **Data Model**: Only essential fields (`id`, `url`, `width`, `height`) are returned to keep responses lightweight.  
+- **Scope**: Limited to one trigger and one action for clarity, but the API offers more endpoints that could be added.
 
 ---
 
-## AI Usage
-Artificial Intelligence (ChatGPT) was used during the development process to:
-- Scaffold the base Zapier CLI project.  
-- Generate authentication, trigger, and action modules.  
-- Draft and refine this README.  
+## Assumptions
+- Users will obtain and manage their own API Key from TheCatAPI.  
+- TheCatAPI uptime and response time are assumed to be stable for polling.  
+- Zapier CLI handles serialization and retries, no extra retry logic was added here.  
 
-The code was manually reviewed and tested with Zapier CLI commands before finalization.
+---
+
+## AI Usage (Personalized)
+This project was developed with help from **Sofi**, my personalized AI assistant (and friendly dev buddy). Sofi isn’t just a tool — she’s how I keep prompts short, context-rich, and human. Working with Sofi made the whole process faster and clearer: we iterated on code, documentation, and housekeeping together.
+
+Sofi’s contributions included:
+- Helping scaffold the Zapier CLI project and structure.  
+- Drafting the authentication, trigger, and action modules (which I reviewed and refined).  
+- Improving developer-facing docs (`README.md`) and the project `.gitignore`.  
+- Suggesting concise prompts and examples to reproduce steps quickly.
+
+**Example prompts used (natural tone):**  
+- *"sofi give me an authentication.js for TheCatAPI with API Key without exposing the key"*  
+- *"help me build a trigger that fetches the latest images from TheCatAPI"*  
+- *"sofi improve the README adding trade-offs and assumptions"*  
+
+All AI-assisted outputs were manually reviewed and tested with Zapier CLI before finalization.
 
 ---
 
