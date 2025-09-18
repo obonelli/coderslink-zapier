@@ -6,7 +6,9 @@ const authentication = require('./authentication');
 
 // Records
 const NewImageTrigger = require('./triggers/new_image');
+const NewBreedImageTrigger = require('./triggers/new_breed_image');
 const CreateFavorite = require('./creates/create_favorite');
+const AddVote = require('./creates/add_vote');
 
 module.exports = {
   version,
@@ -22,13 +24,15 @@ module.exports = {
   // TRIGGERS
   triggers: {
     [NewImageTrigger.key]: NewImageTrigger,
+    [NewBreedImageTrigger.key]: NewBreedImageTrigger,
   },
 
   // SEARCHES
   searches: {},
 
-  // ACTIONS
+  // ACTIONS (CREATES)
   creates: {
     [CreateFavorite.key]: CreateFavorite,
+    [AddVote.key]: AddVote,
   },
 };
