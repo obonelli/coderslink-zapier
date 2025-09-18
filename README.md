@@ -30,6 +30,22 @@ This setup demonstrates how to handle **custom authentication**, **polling trigg
 
 ---
 
+## Environment Variables
+This project uses a `.env` file for local development.  
+You must copy `.env.example` to `.env` and add your own values.
+
+```bash
+# .env.example
+
+# TheCatAPI API Key (get yours from https://thecatapi.com/)
+CAT_API_KEY=your-cat-api-key-here
+```
+
+> In production (Zapier Editor), the user is prompted for the API Key directly.  
+> The `.env` file is only used for **local testing** with `zapier test` and `zapier push`.
+
+---
+
 ## Setup
 ```bash
 # install dependencies
@@ -44,47 +60,47 @@ zapier validate
 # push the integration to your Zapier account
 zapier push
 ```
+> Tip: use `zapier push --skip-npm-install` for faster pushes.
 
 ---
 
 ## How to Test the Integration
 
-### 1. Test Authentication
+### 1) Test Authentication
 - Go to **My Apps** in Zapier.  
 - Connect using your **TheCatAPI API Key**.  
-- Run “Test” → should return successfully.
+- Run **Test** → it should succeed.
 
-### 2. Test Trigger: New Image
-1. Create a Zap with **Trigger: New Image**.  
-2. Test trigger → should return ~10 sample images with `id`, `url`, and `fetched_at`.  
-3. Add an action like **Code by Zapier** to echo `fetched_at` (for ISO validation).  
-
-### 3. Test Trigger: New Breed Image
+### 2) Test Trigger: New Breed Image (with dropdown)
 1. Create a Zap with **Trigger: New Breed Image**.  
 2. Choose a breed from the dynamic dropdown (e.g., Bengal).  
-3. Test trigger → should return images with `breed_id` and `fetched_at`.  
-4. Add **Code by Zapier** step to confirm the datetime is ISO-8601.
+3. Test trigger → should return images with `breed_id` and `fetched_at` (ISO-8601).  
 
-### 4. Test Action: Create Favorite
-1. After a trigger, add **Action: Create Favorite**.  
-2. Map `image_id` from the trigger.  
-3. (Optional) Add a `user_tag` for tracking.  
-4. Test action → should return `{ "message": "SUCCESS", "id": ... }`.
+**Example (editor view):**  
+![New Breed Image Trigger](./docs/screenshots/new-breed-trigger.png)
 
-### 5. Test Action: Add Vote
-1. After a trigger, add **Action: Add Vote**.  
+### 3) Test Action: Add Vote
+1. After the trigger, add **Action: Add Vote**.  
 2. Map `image_id` from the trigger.  
 3. Choose `Vote Value = 1` (upvote) or `0` (downvote).  
-4. Test action → should return vote details:  
-   ```json
-   {
-     "id": 12345,
-     "message": "SUCCESS",
-     "image_id": "abc123",
-     "value": 1,
-     "sub_id": "zap-test-oscar"
-   }
-   ```
+4. Test action → should return vote details with `message: "SUCCESS"`.
+
+**Example (editor view):**  
+![Add Vote Action](./docs/screenshots/add-vote.png)
+
+### 4) (Optional) Validate datetime via Code by Zapier
+- Add a **Code by Zapier → Run Javascript** step.  
+- Input Data: `image_id` and `fetched_at` from the trigger.  
+- Code:
+```js
+return [{
+  ok: true,
+  image_id: inputData.image_id,
+  fetched_at: inputData.fetched_at
+}];
+```
+**Example (editor view):**  
+![Code Echo](./docs/screenshots/code-echo.png)
 
 ---
 

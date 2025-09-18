@@ -13,15 +13,18 @@ pids
 *.seed
 *.pid.lock
 
-# Coverage
+# Coverage / Test artifacts
 coverage/
 .nyc_output/
+*.snap
 
 # Build outputs
 build/
 dist/
 lib-cov/
 storybook-static/
+build.zip
+source.zip
 
 # Dependency directories
 node_modules/
@@ -59,6 +62,9 @@ out/
 
 # Vercel / Deployment
 .vercel/
+
+# Editor / IDE
+.vscode/
 
 # OS junk
 .DS_Store
