@@ -1,6 +1,6 @@
 {
   "name": "coderslink-zapier",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CodersLink Zapier integration challenge",
   "main": "index.js",
   "private": true,
