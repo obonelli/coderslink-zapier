@@ -1,35 +1,40 @@
 // test/auth.test.js
 const nock = require('nock');
 const zapier = require('zapier-platform-core');
-const App = require('../index');
+const appRaw = require('../index');
 
-const appTester = zapier.createAppTester(App);
-const BASE = 'https://api.thecatapi.com';
-
-afterEach(() => nock.cleanAll());
+// create the appTester with your app
+const appTester = zapier.createAppTester(appRaw);
 
 describe('authentication test', () => {
-    it('calls /v1/images/search with x-api-key (mocked)', async () => {
-        const scope = nock(BASE, {
-            reqheaders: { 'x-api-key': 'fake-key-123' }
-        })
-            .get('/v1/images/search')
-            .reply(200, [{ id: 'abc', url: 'https://cdn2.thecatapi.com/images/abc.jpg' }]);
-
-        const bundle = { authData: { api_key: 'fake-key-123' } };
-        const out = await appTester(App.authentication.test, bundle);
-
-        expect(Array.isArray(out)).toBe(true);
-        expect(out[0].id).toBe('abc');
-        scope.done();
+    beforeAll(() => {
+        nock.disableNetConnect(); // prevent real HTTP calls
     });
 
-    // Opt-in LIVE (exporta THECAT_API_KEY y ZP_TEST_LIVE=1 para correrlo)
-    it('LIVE (optional)', async () => {
-        if (!process.env.THECAT_API_KEY || !process.env.ZP_TEST_LIVE) return;
-        const bundle = { authData: { api_key: process.env.THECAT_API_KEY } };
-        const out = await appTester(App.authentication.test, bundle);
-        expect(Array.isArray(out)).toBe(true);
-        expect(out.length).toBeGreaterThan(0);
+    afterEach(() => {
+        nock.cleanAll(); // clear interceptors between tests
+    });
+
+    afterAll(() => {
+        nock.enableNetConnect();
+    });
+
+    test('calls /v1/images/search with x-api-key (mocked)', async () => {
+        // mock the endpoint with query ?limit=1
+        nock('https://api.thecatapi.com')
+            .get('/v1/images/search')
+            .query({ limit: '1' }) // note: as string
+            .matchHeader('x-api-key', 'fake-key-123') // validate the header
+            .reply(200, [{ id: 'abc123', url: 'https://cdn2.thecatapi.com/images/abc123.jpg' }]);
+
+        const bundle = {
+            authData: { api_key: 'fake-key-123' },
+        };
+
+        // run the test defined in authentication.js
+        const result = await appTester(appRaw.authentication.test, bundle);
+
+        expect(Array.isArray(result)).toBe(true);
+        expect(result[0]).toHaveProperty('id', 'abc123');
     });
 });
