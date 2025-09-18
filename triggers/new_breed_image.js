@@ -41,6 +41,7 @@ module.exports = {
                 label: 'Breed ID',
                 type: 'string',
                 required: true,
+                dynamic: 'list_breeds.id.name',
                 helpText: 'Enter the CatAPI breed ID (e.g., "beng" for Bengal, "siam" for Siamese).',
             },
         ],

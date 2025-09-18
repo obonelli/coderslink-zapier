@@ -1,12 +1,17 @@
-// index.js (CommonJS)
+// index.js (CommonJS entrypoint for the Zapier app)
 const { version } = require('./package.json');
 const { version: platformVersion } = require('zapier-platform-core');
 
+// Authentication definition
 const authentication = require('./authentication');
 
-// Records
+// Triggers
 const NewImageTrigger = require('./triggers/new_image');
 const NewBreedImageTrigger = require('./triggers/new_breed_image');
+// Hidden trigger for dynamic dropdown (list of breeds)
+const ListBreeds = require('./triggers/list_breeds');
+
+// Creates (actions)
 const CreateFavorite = require('./creates/create_favorite');
 const AddVote = require('./creates/add_vote');
 
@@ -15,7 +20,7 @@ module.exports = {
   platformVersion,
   authentication,
 
-  // Global hooks
+  // Global hooks (optional middleware)
   beforeRequest: [],
   afterResponse: [],
 
@@ -25,6 +30,7 @@ module.exports = {
   triggers: {
     [NewImageTrigger.key]: NewImageTrigger,
     [NewBreedImageTrigger.key]: NewBreedImageTrigger,
+    [ListBreeds.key]: ListBreeds, // hidden trigger used only for dynamic dropdown
   },
 
   // SEARCHES
