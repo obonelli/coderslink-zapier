@@ -1,0 +1,20 @@
+{
+  "name": "coderslink-zapier",
+  "version": "1.0.0",
+  "description": "CodersLink Zapier integration challenge",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "jest --runInBand --setupFilesAfterEnv=./test/jest.setup.js"
+  },
+  "dependencies": {
+    "zapier-platform-core": "17.7.2"
+  },
+  "devDependencies": {
+    "jest": "^29.6.0",
+    "nock": "^13.5.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
